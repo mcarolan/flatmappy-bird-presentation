@@ -1,3 +1,5 @@
+<!-- page_number: true -->
+
 flatMappy bird
 ===
 
@@ -8,7 +10,6 @@ https://github.com/mcarolan/flatmappy-bird
 @mcarolan88
 mail@mcarolan.net
 
-*please keep questions until the end!*
 
 ---
 
@@ -29,11 +30,15 @@ How did this all start?
 
 ---
 
-![center](itv.jpg)
+![center](giant-rucksack.png)
 
 ---
  
 ![center](reading.jpg)
+
+---
+
+![center](itv.jpg)
 
 ---
 
@@ -61,13 +66,14 @@ http://www.lihaoyi.com/hands-on-scala-js/
 
 ![center](gameloop.png)
 
----
-
-![center](state.jpg)
 
 ---
 
-░░░░░░▄▄▄▄▄▄▄▄▄▄▄
+![center](clockworkorange.gif)
+
+---
+
+  ░░░░░░▄▄▄▄▄▄▄▄▄▄▄
 ░░░░▄▀▀░░░░░░░░░▀▀▄
 ░░▄▀░░░░░░░░░░░░░░░▀▄
 ░▄▀░░░░░███░░░░░░░░░░▀▄
@@ -88,15 +94,11 @@ http://www.lihaoyi.com/hands-on-scala-js/
 ![center](internet.jpeg)
 
 ---
+![center](declarativegamelogic.png)
 
 https://github.com/leonidas/codeblog/blob/master/2012/2012-01-08-streams-coroutines.md
 
 https://github.com/leonidas/codeblog/blob/master/2012/2012-01-17-declarative-game-logic-afrp.md
-
----
-
-Demo
-===
 
 ---
 
@@ -105,103 +107,174 @@ CoRoutine
 
 ---
 
-scala.Function1
+CoRoutine
 ===
-```scala
-trait Function1[A, B] {
-   def apply(input: A): B
-}
-```
+
+Transformers of time varying values
+
+* Composable 
+* Referentially transparent
 
 ---
 
-Problem: identify when a provided string is "Hello"
----
+Problem
+===
+
+There is a time varying `String` value.
+
+We want to transform it to a `Boolean`:
+
+* The current value of the `String` is "World"
+AND
+
+* The previous value of the `String` was "Hello"
 
 ---
 
-
-![center](function.png)
-
----
-
-```scala
-val isHello = new Function1[String, Boolean] {
-  override def apply(input: String): Boolean =
-    input == "Hello"
-}
-
-isHello("Hello")
-isHello("World")
-```
-```
-isHello: scala.Function1[String,Boolean] = <function1>
-
-res0: Boolean = true
-
-res1: Boolean = false
-```
----
-
-Problem: identify when the provided string is "Hello" AND the previously provided string is "World"
----
-
-![center](function.png)
+![center](computation/0.png)
 
 ---
 
-![center](coroutine.png)
+![center](computation/1.png)
 
 ---
 
-```scala
-trait Function1[A, B] {
-   def apply(input: A): B
-}
-```
+![center](computation/2.png)
+
+---
+
+![center](computation/3.png)
+
+---
+
+![center](computation/4.png)
+
+---
+
+![center](computation/5.png)
+
+---
+
+![center](computation/6.png)
+
+---
+
+![center](computation/7.png)
+
+---
+
+![center](computation/8.png)
+
+---
+
+![center](computation/9.png)
+
+---
+
+![center](computation/10.png)
+
+---
+
+![center](computation/11.png)
+
+---
+
+![center](computation/12.png)
+
+---
+
+![center](computation/13.png)
+
+---
+
+![center](computation/14.png)
+
+---
+
+![center](computation/15.png)
+
+---
+
+![center](computation/16.png)
+
+---
+
+![center](computation/17.png)
+
+---
+
 
 ```scala
 trait CoRoutine[A, B] {
   def apply(input: A): (B, CoRoutine[A, B])
-  
-  def lift[A, B](f: A => (B, CoRoutine[A, B])): CoRoutine[A, B] =
-    new CoRoutine[A, B] {
-      override def apply(input: A): (B, CoRoutine[A, B]) =
-        f(input)
-    }
 }
 ```
 
 ---
 
-```scala
-val helloWorld: CoRoutine[String, Boolean] = {
-  def inner(lastWordHello: Boolean): CoRoutine[String, Boolean] =
-    CoRoutine.lift(input =>
-      (lastWordHello && input == "World", 
-         inner(input == "Hello"))
-    )
+Viewer challenge: implement the helloWorld CoRoutine
 
-  inner(false)
+```scala
+trait CoRoutine[A, B] {
+  def apply(input: A): (B, CoRoutine[A, B])
 }
 
-val (res1, fnNext) = helloWorld("Hello")
-val (res2, fnNextNext) = fnNext("World")
-val (res3, fnNextNextNext) = fnNextNext("Foo")
-val (res4, fnNextNextNextNext) = fnNextNextNext("Bar")
+val helloWorld: CoRoutine[String, Boolean] = ???
 ```
 
+---
+
+![center](coolstorybro.jpeg)
+
+Ok interesting, what's the game?
+===
+
+---
+
+Demo
+
+---
+
+What time varying values are in this game?
+===
+
+---
+
+* Clock
+* Keyboard input
+
+---
+
+* Clock
+	* Player falls at a constant rate with regards to current clock reading
+	* Pipe moves at a constant rate with regards to current clock reading
+* Keyboard input
+	* Player rises at a constant rate with regards to whether the space bar key is currently pressed
+	
+---
+
 ```scala
-helloWorld: CoRoutine[String,Boolean] = CoRoutine$$anon$1@31332bb1
-res1: Boolean = false
-fnNext: CoRoutine[String,Boolean] = CoRoutine$$anon$1@5218d213
-res2: Boolean = true
-fnNextNext: CoRoutine[String,Boolean] = CoRoutine$$anon$1@7ff2dbf
-res3: Boolean = false
-fnNextNextNext: CoRoutine[String,Boolean] = CoRoutine$$anon$1@7f9da359
-res4: Boolean = false
-fnNextNextNextNext: CoRoutine[String,Boolean] = CoRoutine$$anon$1@4532cae9
+case class GameState(player: Player, pipe: Pipe, lost: Boolean)
+
+val game: CoRoutine[(Set[Key], Time), GameState] = ???
 ```
+
+
+---
+
+Building blocks
+
+---
+
+map, >>>
+
+---
+
+case study
+
+---
+none crazy applications
+
 ---
 
 
@@ -223,5 +296,8 @@ http://sharpwriter.deviantart.com/art/Welcome-to-the-Internet-Please-Follow-me-3
 
 https://www.flickr.com/photos/gilles_dubochet/7327041044
 
+https://blogs.gov.scot/marketing/2015/01/09/new-year-lighter-load/
 
---
+http://static-media.fxx.com/img/FX_Networks_-_FXX/684/907/Simpsons_12_06_P1.jpg?resize=600
+
+https://cdn.meme.am/instances/500x/67598366.jpg
