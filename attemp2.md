@@ -66,7 +66,6 @@ http://www.lihaoyi.com/hands-on-scala-js/
 
 ![center](gameloop.png)
 
-
 ---
 
 ![center](clockworkorange.gif)
@@ -110,10 +109,10 @@ CoRoutine
 CoRoutine
 ===
 
-Transformers of time varying values
-
-* Composable 
-* Referentially transparent
+Transformers of time varying values, e.g:
+* Head of a queue
+* Keyboard state
+* Temperature
 
 ---
 
@@ -122,9 +121,9 @@ Problem
 
 There is a time varying `String` value.
 
-We want to transform it to a `Boolean`:
+We want to transform it to a time varying `Boolean`:
 
-* The current value of the `String` is "World"
+* The latest value of the `String` is "World"
 AND
 
 * The previous value of the `String` was "Hello"
@@ -175,63 +174,23 @@ AND
 
 ---
 
-![center](computation/11.png)
-
----
-
-![center](computation/12.png)
-
----
-
-![center](computation/13.png)
-
----
-
-![center](computation/14.png)
-
----
-
-![center](computation/15.png)
-
----
-
-![center](computation/16.png)
-
----
-
-![center](computation/17.png)
-
----
-
-
 ```scala
 trait CoRoutine[A, B] {
   def apply(input: A): (B, CoRoutine[A, B])
 }
-```
-
----
-
-Viewer challenge: implement the helloWorld CoRoutine
-
-```scala
-trait CoRoutine[A, B] {
-  def apply(input: A): (B, CoRoutine[A, B])
-}
-
-val helloWorld: CoRoutine[String, Boolean] = ???
 ```
 
 ---
 
 ![center](coolstorybro.jpeg)
 
-Ok interesting, what's the game?
+Ok interesting, where's the game?
 ===
 
 ---
 
 Demo
+==
 
 ---
 
@@ -240,40 +199,60 @@ What time varying values are in this game?
 
 ---
 
-* Clock
-* Keyboard input
+![center](clock.png)
 
 ---
 
-* Clock
-	* Player falls at a constant rate with regards to current clock reading
-	* Pipe moves at a constant rate with regards to current clock reading
-* Keyboard input
-	* Player rises at a constant rate with regards to whether the space bar key is currently pressed
-	
+![center](keyboard.png)
+
+---
+
+CoRoutine as a game loop
+===
+
+---
+
+![center](gameloop.png)
+
+---
+
+![center](gamecoroutine.png)
+
 ---
 
 ```scala
-case class GameState(player: Player, pipe: Pipe, lost: Boolean)
-
 val game: CoRoutine[(Set[Key], Time), GameState] = ???
 ```
+---
 
+Composition
+===
+
+```scala
+def >>>[A, B, C](first: CoRoutine[A, B], 
+  second: CoRoutine[B, C]): CoRoutine[A, C] = ???
+```
 
 ---
 
-Building blocks
+Case Study
+===
+
+![center](bird.png)
 
 ---
 
-map, >>>
+Thank you!
+===
 
----
+I hope you have taken away:
 
-case study
-
----
-none crazy applications
+* A feeling for how FRP, and CoRoutine's work
+* Pride in functional programming
+* A couple of hints about where to start building your own pure game:
+  * https://github.com/leonidas/codeblog/blob/master/2012/2012-01-08-streams-coroutines.md
+  * https://github.com/leonidas/codeblog/blob/master/2012/2012-01-17-declarative-game-logic-afrp.md
+  * http://www.lihaoyi.com/hands-on-scala-js/
 
 ---
 
