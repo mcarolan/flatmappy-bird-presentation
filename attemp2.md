@@ -10,6 +10,7 @@ https://github.com/mcarolan/flatmappy-bird
 @mcarolan88
 mail@mcarolan.net
 
+<!-- footer: Martin Carolan: flatMappy bird. Twitter: @mcarolan88 -->
 
 ---
 
@@ -93,7 +94,7 @@ http://www.lihaoyi.com/hands-on-scala-js/
 ![center](internet.jpeg)
 
 ---
-![center](declarativegamelogic.png)
+![center 50%](declarativegamelogic.png)
 
 https://github.com/leonidas/codeblog/blob/master/2012/2012-01-08-streams-coroutines.md
 
@@ -103,6 +104,10 @@ https://github.com/leonidas/codeblog/blob/master/2012/2012-01-17-declarative-gam
 
 CoRoutine
 ===
+
+---
+
+![center](transformer.jpg)
 
 ---
 
@@ -119,7 +124,7 @@ Transformers of time varying values, e.g:
 Problem
 ===
 
-There is a time varying `String` value.
+There is a time varying `String` value that we can sample.
 
 We want to transform it to a time varying `Boolean`:
 
@@ -174,71 +179,20 @@ AND
 
 ---
 
-```scala
-trait CoRoutine[A, B] {
-  def apply(input: A): (B, CoRoutine[A, B])
-}
-```
-
----
-
-![center](coolstorybro.jpeg)
-
-Ok interesting, where's the game?
-===
-
----
-
-Demo
-==
-
----
-
-What time varying values are in this game?
-===
-
----
-
-![center](clock.png)
-
----
-
-![center](keyboard.png)
-
----
-
 CoRoutine as a game loop
 ===
 
 ---
 
-![center](gameloop.png)
-
----
-
+![center](computation/10.png)
 ![center](gamecoroutine.png)
 
 ---
 
-```scala
-val game: CoRoutine[(Set[Key], Time), GameState] = ???
-```
----
+![center](coolstorybro.jpeg)
 
-Composition
-===
-
-```scala
-def >>>[A, B, C](first: CoRoutine[A, B], 
-  second: CoRoutine[B, C]): CoRoutine[A, C] = ???
-```
-
----
-
-Case Study
-===
-
-![center](bird.png)
+Where's the game?
+==
 
 ---
 
@@ -247,12 +201,17 @@ Thank you!
 
 I hope you have taken away:
 
-* A feeling for how FRP, and CoRoutine's work
+* A feeling for how FRP, and Coroutines work
 * Pride in functional programming
-* A couple of hints about where to start building your own pure game:
+* A couple of hints about what to look at if it peaked your interest
+* Scala Coroutines library:
+  * http://storm-enroute.com/coroutines/
+* Try to implement Coroutines yourself:
   * https://github.com/leonidas/codeblog/blob/master/2012/2012-01-08-streams-coroutines.md
-  * https://github.com/leonidas/codeblog/blob/master/2012/2012-01-17-declarative-game-logic-afrp.md
-  * http://www.lihaoyi.com/hands-on-scala-js/
+ 
+* Project: https://github.com/mcarolan/flatmappy-bird
+
+
 
 ---
 
@@ -280,3 +239,5 @@ https://blogs.gov.scot/marketing/2015/01/09/new-year-lighter-load/
 http://static-media.fxx.com/img/FX_Networks_-_FXX/684/907/Simpsons_12_06_P1.jpg?resize=600
 
 https://cdn.meme.am/instances/500x/67598366.jpg
+
+https://www.flickr.com/photos/johnnywashngo/15448185734/
